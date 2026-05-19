@@ -240,6 +240,77 @@ Commit "chore: seo, polish, legal pages".
 
 ---
 
+## Prompt 11 — Audit, polish, contact page, tests, deployment & git automation
+
+```
+Do a complete project audit and finish the website so it's production-ready, end-user friendly, and eye-catchy. Work in this exact order and commit after each part.
+
+PART 1 — AUDIT (find what's missing, broken, or skipped)
+- Walk the entire repo and produce ./AUDIT.md listing:
+  - Files referenced in code/imports/config but missing on disk (broken imports, missing assets, dead routes).
+  - Env vars used in code but not declared in .env.example.
+  - Failed/skipped tests, broken builds, lint errors, type errors, console errors in browser.
+  - Unused files, dead code, leftover TODO/FIXME comments.
+  - Missing standard project files: README.md, LICENSE, .gitignore, .gitattributes, .env.example, CONTRIBUTING.md, SECURITY.md, .editorconfig, .pre-commit-config.yaml, .nvmrc, .python-version.
+- Fix EVERY item in AUDIT.md. One small focused commit per logical fix.
+
+PART 2 — UI / UX POLISH (eye-catchy + user-friendly)
+- Apply a clean design system: Inter or Poppins typography, a primary + accent color, soft shadows, rounded-2xl corners, consistent spacing scale.
+- Smooth Framer Motion animations on page load, hover, and scroll-into-view.
+- Sticky responsive navbar with mobile hamburger, hero with strong CTA, footer with quick links + socials.
+- Loading skeletons on every data fetch, friendly empty states with illustrations, toast notifications (sonner or react-hot-toast), inline form validation.
+- Accessibility: alt text on every image, aria-labels on icon buttons, full keyboard navigation, visible focus rings, color contrast >= WCAG AA.
+- Responsive at mobile (<=380px), tablet, desktop. Verify in Chrome DevTools device toolbar.
+- SEO + meta: <title>, meta description, Open Graph + Twitter tags, favicon, robots.txt, sitemap.xml.
+- Lighthouse targets: Performance >= 90, Accessibility >= 95, Best Practices >= 95, SEO >= 95.
+
+PART 3 — CONTACT PAGE (use these exact details)
+Build or replace src/pages/Contact.* with:
+- Name: Mohan Kumar Satyavarapu
+- Phone: +91 8520933400  — render as a clickable tel:+918520933400 link
+- Email: mohankumarsatyavarapu225@gmail.com  — clickable mailto: link
+- WhatsApp Business button: official WhatsApp logo (inline SVG from simple-icons), opens https://wa.me/918520933400 in a new tab, aria-label "Chat on WhatsApp Business".
+- LinkedIn button: official LinkedIn logo (inline SVG from simple-icons), opens https://www.linkedin.com/in/mohan-kumar-satyavarapu/ in a new tab. Leave a TODO comment to update the slug if different.
+- Contact form: Name, Email, Phone, Message — POSTs to /api/contact, which stores the enquiry in Postgres and sends an SES email to the owner. Show success/error toast.
+- Embed a Google Maps iframe centered on Hyderabad as a placeholder.
+- Use ONLY official brand SVGs (simple-icons) — no raster logos, no random downloaded PNGs.
+- Mirror the same contact details in the site footer.
+
+PART 4 — UNIT + INTEGRATION TESTS
+- Frontend: Vitest + React Testing Library. Cover at minimum — navbar render, route smoke tests, contact form validation, contact form submit success/failure, accessibility (axe).
+- Backend: pytest. Cover at minimum — /api/contact happy path, validation errors, DB persistence, SES send (mocked), S3 upload (mocked with moto), auth on admin routes.
+- Coverage gate: 70% lines, 60% branches. CI fails if below.
+- Wire `npm test` and `pytest -q` into package.json scripts and a Makefile (make test, make lint, make build, make deploy).
+
+PART 5 — DEPLOYMENT READINESS
+- Multi-stage Dockerfile for backend, lightweight image for frontend. docker-compose.yml with backend + Postgres + frontend.
+- Healthcheck endpoints: GET /health (liveness), GET /ready (verifies DB + S3 + SES reachable).
+- Structured JSON logging with request IDs; React error boundary on frontend.
+- Zero hardcoded secrets — everything from env. Document every key in .env.example with a comment.
+- Update ./infra/README.md with final deploy steps and a "Day-2 ops" section: backups, log rotation, rollback procedure, on-call checklist.
+
+PART 6 — GIT + AUTOMATION (catch everything I forgot)
+- .gitignore: node_modules, __pycache__, .venv, .env*, dist, build, coverage, .DS_Store, .idea, .vscode, *.log.
+- .gitattributes for consistent line endings.
+- Conventional Commits enforced via commitlint + husky.
+- pre-commit hooks: ruff + black (Python), eslint + prettier (JS/TS), detect-secrets, end-of-file-fixer, trailing-whitespace, check-yaml, check-json.
+- .github/workflows/ci.yml — on every PR: install, lint, typecheck, test, build.
+- .github/workflows/deploy.yml — on push to main: build Docker image, push to ECR, SSH to EC2 to pull + restart; deploy frontend to AWS Amplify.
+- .github/dependabot.yml for npm + pip weekly updates.
+- .github/pull_request_template.md plus bug + feature issue templates.
+- CODEOWNERS with @mohankumarsatyavarapu as owner.
+- CONTRIBUTING.md documenting branch protection: require PR review + green CI before merge to main.
+
+PART 7 — FINAL VERIFICATION
+- Re-run the AUDIT — AUDIT.md must come back clean.
+- Run locally: `npm run build`, `npm test`, `pytest`, `docker compose up --build`. All green.
+- Open the site, walk through every page on mobile + desktop. No console errors, no broken images, no 404s.
+- Update README.md with: project overview, hero screenshot/GIF, tech stack badges, quickstart, env vars table, deploy section, and a Contact section using the exact details from Part 3.
+- Final commit: "chore: production-ready polish, contact page, tests, ci/cd, deploy".
+```
+
+---
+
 ## How to use these prompts
 
 1. Open Claude Code in your project folder.
