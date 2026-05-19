@@ -18,6 +18,21 @@ class Settings(BaseSettings):
     SMTP_FROM: str = ""
     SMTP_TO: str = ""
 
+    # Auth
+    SECRET_KEY: str = "CHANGE_ME_IN_PRODUCTION_use_openssl_rand_hex_32"
+    JWT_ALGORITHM: str = "HS256"
+    JWT_EXPIRE_MINUTES: int = 1440
+
+    # Seeding
+    SEED_ADMIN_EMAIL: str = "admin@civilsupplies.local"
+    SEED_ADMIN_PASSWORD: str = "ChangeMe123!"
+
+    # Uploads
+    UPLOAD_DIR: str = "./uploads"
+    MAX_UPLOAD_MB: int = 10
+    AWS_S3_BUCKET: str = ""
+    AWS_REGION: str = "ap-south-1"
+
     # App
     APP_NAME: str = "Civil Supplies API"
     ENVIRONMENT: str = "development"

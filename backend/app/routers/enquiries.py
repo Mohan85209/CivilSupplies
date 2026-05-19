@@ -1,10 +1,11 @@
-from fastapi import APIRouter, Depends, BackgroundTasks, HTTPException, status
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
+from app.auth import get_current_admin
 from app.database import get_db
-from app.models import Enquiry
-from app.schemas import EnquiryCreate, EnquiryOut, EnquiryResponse
 from app.email_service import send_enquiry_notification
+from app.models import AdminUser, Enquiry
+from app.schemas import EnquiryCreate, EnquiryOut, EnquiryResponse, EnquiryStatusUpdate
 
 router = APIRouter(prefix="/api/enquiries", tags=["enquiries"])
 
@@ -15,7 +16,6 @@ def create_enquiry(
     background_tasks: BackgroundTasks,
     db: Session = Depends(get_db),
 ):
-    """Public endpoint - submit a contact enquiry from the website form."""
     enquiry = Enquiry(
         name=payload.name.strip(),
         phone=payload.phone,
@@ -30,7 +30,6 @@ def create_enquiry(
     db.commit()
     db.refresh(enquiry)
 
-    # Fire-and-forget email to the owner; doesn't block the response.
     background_tasks.add_task(send_enquiry_notification, enquiry)
 
     return EnquiryResponse(
@@ -41,8 +40,12 @@ def create_enquiry(
 
 
 @router.get("", response_model=list[EnquiryOut])
-def list_enquiries(skip: int = 0, limit: int = 50, db: Session = Depends(get_db)):
-    """TEMP: list enquiries. Protect this with JWT/admin auth before production."""
+def list_enquiries(
+    skip: int = 0,
+    limit: int = 50,
+    db: Session = Depends(get_db),
+    _admin: AdminUser = Depends(get_current_admin),
+):
     if limit > 200:
         raise HTTPException(status_code=400, detail="limit too large")
     return (
@@ -52,3 +55,19 @@ def list_enquiries(skip: int = 0, limit: int = 50, db: Session = Depends(get_db)
         .limit(limit)
         .all()
     )
+
+
+@router.patch("/{enquiry_id}", response_model=EnquiryOut)
+def update_enquiry_status(
+    enquiry_id: int,
+    payload: EnquiryStatusUpdate,
+    db: Session = Depends(get_db),
+    _admin: AdminUser = Depends(get_current_admin),
+):
+    enquiry = db.query(Enquiry).filter(Enquiry.id == enquiry_id).first()
+    if not enquiry:
+        raise HTTPException(status_code=404, detail="Enquiry not found")
+    enquiry.status = payload.status
+    db.commit()
+    db.refresh(enquiry)
+    return enquiry
