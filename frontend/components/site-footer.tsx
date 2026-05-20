@@ -19,8 +19,8 @@ export function SiteFooter() {
           <div className="font-semibold mb-3">Reach us</div>
           <ul className="text-sm space-y-2 text-white/80">
             <li className="flex gap-2"><MapPin className="h-4 w-4 mt-0.5" /> Hyderabad, Telangana, India</li>
-            <li className="flex gap-2"><Phone className="h-4 w-4 mt-0.5" /> <a href="tel:+919999999999">+91 99999 99999</a></li>
-            <li className="flex gap-2"><Mail className="h-4 w-4 mt-0.5" /> <a href="mailto:hello@civilsupplies.local">hello@civilsupplies.local</a></li>
+            <li className="flex gap-2"><Phone className="h-4 w-4 mt-0.5" /> <a href="tel:+919505056386">+91 95050 56386</a></li>
+            <li className="flex gap-2"><Mail className="h-4 w-4 mt-0.5" /> <a href="mailto:bellamsudheer19@gmail.com">bellamsudheer19@gmail.com</a></li>
           </ul>
         </div>
 

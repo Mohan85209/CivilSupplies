@@ -4,7 +4,7 @@ import {
   Package,
   Wrench,
   Hammer,
-  Hardhat,
+  HardHat,
   LineChart,
   type LucideIcon,
 } from "lucide-react";
@@ -51,7 +51,7 @@ export const SERVICES: Service[] = [
     slug: "technical-consultation",
     title: "Technical Consultation",
     description: "Material specification advice from experienced civil engineers — get the right grade, every time.",
-    icon: Hardhat,
+    icon: HardHat,
   },
   {
     slug: "project-material-planning",
