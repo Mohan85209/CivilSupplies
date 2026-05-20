@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
-import { MapPin, Phone, Mail, Clock, Send } from "lucide-react";
+import { MapPin, Phone, Mail, Clock, Send, User } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -36,6 +36,11 @@ const PROJECT_TYPES: ProjectType[] = ["Residential", "Commercial", "Infrastructu
 
 const CONTACT_INFO = [
   {
+    icon: User,
+    label: "Contact Person",
+    value: "Sudheer Bellam",
+  },
+  {
     icon: MapPin,
     label: "Address",
     value: "Plot 42, Industrial Estate, Hyderabad, Telangana – 500 072",
@@ -43,12 +48,12 @@ const CONTACT_INFO = [
   {
     icon: Phone,
     label: "Phone",
-    value: "+91 98765 43210",
+    value: "+91 95050 56386",
   },
   {
     icon: Mail,
     label: "Email",
-    value: "info@civilsupplies.in",
+    value: "bellamsudheer19@gmail.com",
   },
   {
     icon: Clock,
