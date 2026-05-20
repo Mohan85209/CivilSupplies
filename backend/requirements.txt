@@ -8,7 +8,7 @@ email-validator==2.2.0
 slowapi==0.1.9
 # Auth
 passlib[bcrypt]==1.7.4
-python-jose[cryptography]==3.3.0
+python-jose[cryptography]==3.5.0
 # Multipart uploads
 python-multipart==0.0.12
 # Tests
