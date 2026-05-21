@@ -1,0 +1,102 @@
+<section class="section">
+  <div class="container contact-grid">
+    <aside class="contact-info">
+      <span class="badge badge--orange">Contact</span>
+      <h1>Let's talk about your project.</h1>
+      <p class="text-muted">Share a few details and our team will get back to you within one business day.</p>
+
+      <ul class="info-list">
+        <li><mat-icon>phone</mat-icon> <div><strong>+91 95050 56386</strong><small>Mon–Sat · 9:00 AM – 7:00 PM</small></div></li>
+        <li><mat-icon>email</mat-icon> <div><strong>bellamsudheer19&#64;gmail.com</strong><small>For quotes & enquiries</small></div></li>
+        <li><mat-icon>location_on</mat-icon> <div><strong>Sanathnagar Industrial Estate</strong><small>Hyderabad, Telangana 500018</small></div></li>
+        <li><mat-icon>schedule</mat-icon> <div><strong>24-hour quote turnaround</strong><small>For complete BOQ submissions</small></div></li>
+      </ul>
+
+      <div class="map card">
+        <iframe
+          title="Office location map"
+          src="https://www.openstreetmap.org/export/embed.html?bbox=78.4%2C17.3%2C78.6%2C17.5&layer=mapnik"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+        ></iframe>
+      </div>
+    </aside>
+
+    <form class="card contact-form" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <h2>Send an enquiry</h2>
+
+      <div class="row">
+        <mat-form-field appearance="outline">
+          <mat-label>Full name</mat-label>
+          <input matInput formControlName="name" required />
+          @if (form.controls.name.touched && form.controls.name.invalid) {
+            <mat-error>Please enter your name.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Phone</mat-label>
+          <input matInput formControlName="phone" required inputmode="tel" />
+          @if (form.controls.phone.touched && form.controls.phone.invalid) {
+            <mat-error>Enter a valid phone number.</mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <div class="row">
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email" required type="email" />
+          @if (form.controls.email.touched && form.controls.email.invalid) {
+            <mat-error>Enter a valid email address.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>City</mat-label>
+          <input matInput formControlName="city" placeholder="Hyderabad, Vijayawada…" />
+        </mat-form-field>
+      </div>
+
+      <div class="row">
+        <mat-form-field appearance="outline">
+          <mat-label>Project type</mat-label>
+          <mat-select formControlName="projectType">
+            @for (t of projectTypes; track t) {
+              <mat-option [value]="t">{{ t }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Materials needed</mat-label>
+          <mat-select formControlName="materials" multiple>
+            @for (m of materialOptions; track m) {
+              <mat-option [value]="m">{{ m }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Estimated quantity</mat-label>
+        <input matInput formControlName="quantity" placeholder="e.g. 50 tons cement, 5T TMT steel" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Message</mat-label>
+        <textarea matInput formControlName="message" rows="4" placeholder="Tell us about your project, timeline and site location."></textarea>
+        @if (form.controls.message.touched && form.controls.message.errors?.['maxlength']) {
+          <mat-error>Message is too long.</mat-error>
+        }
+      </mat-form-field>
+
+      <button type="submit" class="btn btn--primary btn--block" [disabled]="form.invalid">
+        <mat-icon>send</mat-icon> Submit enquiry
+      </button>
+      <small class="text-muted disclaimer">
+        By submitting you agree to be contacted about your enquiry. We don't share your details.
+      </small>
+    </form>
+  </div>
+</section>
