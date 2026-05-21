@@ -1,0 +1,70 @@
+<section class="section">
+  <div class="container about-grid">
+    <div>
+      <span class="badge badge--orange">About us</span>
+      <h1>Building the supply chain behind your project.</h1>
+      <p class="lede">
+        Civil Supplies is a Hyderabad-based partner for builders and contractors looking for
+        dependable construction materials and on-site services. From the smallest residential
+        slab to multi-tower commercial pours, we ensure the right materials arrive at the right
+        time — at the right price.
+      </p>
+      <div class="hero-cta">
+        <a routerLink="/quote" class="btn btn--primary"><mat-icon>request_quote</mat-icon> Get a project quote</a>
+        <a routerLink="/contact" class="btn btn--ghost">Talk to us</a>
+      </div>
+    </div>
+    <aside class="card mission-card">
+      <h3><mat-icon>flag</mat-icon> Our mission</h3>
+      <p>Make construction-material procurement <strong>predictable, transparent, and on-schedule</strong> for every builder we work with.</p>
+      <h3><mat-icon>visibility</mat-icon> Our vision</h3>
+      <p>To be the most trusted civil-supply partner across the Telugu states, with a reputation for quality and reliability.</p>
+    </aside>
+  </div>
+</section>
+
+<section class="section muted-bg">
+  <div class="container">
+    <h2 class="text-center">What we stand for</h2>
+    <div class="values-grid">
+      @for (v of values; track v.title) {
+        <article class="card">
+          <span class="value-icon"><mat-icon>{{ v.icon }}</mat-icon></span>
+          <h3>{{ v.title }}</h3>
+          <p>{{ v.text }}</p>
+        </article>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2 class="text-center">Our journey</h2>
+    <ol class="timeline">
+      @for (m of milestones; track m.year) {
+        <li>
+          <span class="timeline-year">{{ m.year }}</span>
+          <div>
+            <h3>{{ m.title }}</h3>
+            <p>{{ m.text }}</p>
+          </div>
+        </li>
+      }
+    </ol>
+  </div>
+</section>
+
+<section class="section muted-bg">
+  <div class="container cert-band">
+    <div>
+      <h2>Certifications & registrations</h2>
+      <p class="text-muted">Compliance is non-negotiable in construction. Here's what backs our supply.</p>
+    </div>
+    <ul class="cert-list">
+      @for (c of certifications; track c) {
+        <li><mat-icon>workspace_premium</mat-icon> {{ c }}</li>
+      }
+    </ul>
+  </div>
+</section>
