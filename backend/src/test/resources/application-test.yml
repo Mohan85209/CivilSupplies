@@ -1,0 +1,42 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:test;MODE=PostgreSQL;DB_CLOSE_DELAY=-1
+    username: sa
+    password: ""
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+  flyway:
+    enabled: false
+  mail:
+    host: localhost
+    port: 25
+  cache:
+    type: simple
+
+app:
+  cors:
+    allowed-origins: http://localhost
+  jwt:
+    secret: this-is-a-32-byte-long-test-secret-for-jwt-signing-please
+    issuer: civilsupplies-api
+    access-ttl-minutes: 60
+    refresh-ttl-minutes: 1440
+  storage:
+    type: local
+    local-dir: ./build/test-uploads
+    s3-bucket: ""
+    s3-region: ap-south-1
+  notification:
+    from: test@civilsupplies.in
+    admin-to: admin@civilsupplies.in
+  ratelimit:
+    enquiries-per-hour: 1000
+    quotes-per-hour: 1000
+    newsletter-per-hour: 1000
+
+logging:
+  level:
+    org.springframework: WARN
+    in.civilsupplies: INFO
