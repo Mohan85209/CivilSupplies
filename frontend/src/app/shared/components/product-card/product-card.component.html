@@ -1,12 +1,18 @@
-<article class="product-card card">
+<article class="product-card card cs-tilt">
   <a [routerLink]="['/products', product.slug]" class="card-link">
-    <div class="card-image" [style.backgroundImage]="'url(' + (product.imageUrl || '/assets/images/placeholder.svg') + ')'">
+    <div class="card-image-wrap cs-zoom">
+      <div
+        class="card-image cs-zoom-target"
+        [style.backgroundImage]="'url(' + (product.imageUrl || '/assets/images/placeholder.svg') + ')'"
+      ></div>
+      <span class="card-image-overlay"></span>
       @if (product.brand) {
         <span class="badge badge--orange brand-pill">{{ product.brand }}</span>
       }
       <button
         mat-icon-button
         class="wishlist-btn"
+        [class.is-active]="wishlist.has(product.id)"
         (click)="toggleWishlist($event)"
         [attr.aria-label]="wishlist.has(product.id) ? 'Remove from wishlist' : 'Add to wishlist'"
       >

@@ -84,8 +84,9 @@ app:
     s3-bucket: ${S3_BUCKET:}
     s3-region: ${S3_REGION:ap-south-1}
   notification:
-    from: ${MAIL_FROM:no-reply@civilsupplies.in}
-    admin-to: ${ADMIN_NOTIFY_TO:sales@civilsupplies.in}
+    from: ${MAIL_FROM:bellamsudheer19@gmail.com}
+    admin-to: ${ADMIN_NOTIFY_TO:bellamsudheer19@gmail.com}
+    contact-phone: ${CONTACT_PHONE:+91 95050 56386}
   ratelimit:
     enquiries-per-hour: 10
     quotes-per-hour: 5
@@ -103,13 +104,13 @@ spring:
     driver-class-name: org.h2.Driver
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create-drop
   h2:
     console:
       enabled: true
       path: /h2-console
   flyway:
-    locations: classpath:db/migration,classpath:db/migration-h2
+    enabled: false
 
 ---
 spring:
@@ -119,3 +120,10 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
+
+server:
+  error:
+    include-message: never
+    include-stacktrace: never
+    include-binding-errors: never
+    include-exception: false

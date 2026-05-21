@@ -5,6 +5,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.core.env.Environment;
+import org.springframework.core.env.Profiles;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -19,12 +21,21 @@ import java.util.UUID;
 @Service
 public class JwtService {
 
+    private static final String INSECURE_DEFAULT_SECRET_PREFIX = "change-me-please";
+
     private final AppProperties props;
     private final SecretKey signingKey;
 
-    public JwtService(AppProperties props) {
+    public JwtService(AppProperties props, Environment env) {
         this.props = props;
-        byte[] keyBytes = props.jwt().secret().getBytes(StandardCharsets.UTF_8);
+        String secret = props.jwt().secret();
+        if (env.acceptsProfiles(Profiles.of("prod"))
+                && (secret == null || secret.startsWith(INSECURE_DEFAULT_SECRET_PREFIX))) {
+            throw new IllegalStateException(
+                    "JWT_SECRET must be set to a strong random value in prod profile " +
+                    "(generate with: openssl rand -base64 48).");
+        }
+        byte[] keyBytes = secret == null ? new byte[0] : secret.getBytes(StandardCharsets.UTF_8);
         if (keyBytes.length < 32) {
             throw new IllegalStateException("JWT secret must be at least 32 bytes (256 bits).");
         }

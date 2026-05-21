@@ -6,7 +6,7 @@
 
 ## 1. Business context
 
-- **Owner:** Mohan Kumar, based in Hyderabad, India.
+- **Owner:** Sudheer Bellam, based in Hyderabad, India.
 - **Business:** Civil engineering supplies and services — supplies construction materials (cement, TMT steel, bricks/blocks, aggregates, RMC, chemicals, tools, safety gear, surveying instruments) and offers services (material supply & delivery, site survey & estimation, bulk procurement, RMC pumping, equipment rental, technical consultation, project material planning).
 - **Customers:** Builders, contractors, infrastructure firms, primarily in Telangana & Andhra Pradesh.
 - **Primary website goals:**

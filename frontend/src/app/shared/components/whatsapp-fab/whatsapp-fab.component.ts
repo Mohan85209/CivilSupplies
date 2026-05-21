@@ -27,20 +27,41 @@ import { environment } from '@env/environment';
         position: fixed;
         right: 1.25rem;
         bottom: 1.25rem;
-        width: 56px;
-        height: 56px;
+        width: 58px;
+        height: 58px;
         border-radius: 50%;
         background: #25d366;
         color: #fff;
         display: grid;
         place-items: center;
-        box-shadow: 0 8px 24px rgba(37, 211, 102, 0.4);
+        box-shadow: 0 10px 28px rgba(37, 211, 102, 0.45);
         z-index: 90;
-        transition: transform 0.15s ease;
+        transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.2s ease;
+        animation: cs-pulse-ring 2.4s ease-out infinite;
       }
-      .fab:hover { transform: scale(1.05); }
+      .fab::before {
+        content: '';
+        position: absolute;
+        inset: -6px;
+        border-radius: 50%;
+        border: 2px solid rgba(37, 211, 102, 0.4);
+        animation: cs-fab-ring 2.4s ease-out infinite;
+      }
+      .fab:hover {
+        transform: scale(1.08) rotate(-4deg);
+        box-shadow: 0 14px 32px rgba(37, 211, 102, 0.55);
+      }
+      .fab svg { position: relative; z-index: 1; }
+      @keyframes cs-fab-ring {
+        0%   { transform: scale(1);   opacity: 0.6; }
+        70%  { transform: scale(1.35); opacity: 0; }
+        100% { transform: scale(1.35); opacity: 0; }
+      }
       @media (max-width: 768px) {
         .fab { right: 0.85rem; bottom: 0.85rem; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .fab, .fab::before { animation: none; }
       }
     `,
   ],

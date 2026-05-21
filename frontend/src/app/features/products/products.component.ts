@@ -13,6 +13,7 @@ import { catchError } from 'rxjs/operators';
 import { ApiService } from '@core/services/api.service';
 import { Category, PageResponse, Product, ProductFilter } from '@core/models/domain.models';
 import { ProductCardComponent } from '@shared/components/product-card/product-card.component';
+import { ComingSoonComponent, ComingSoonItem } from '@shared/components/coming-soon/coming-soon.component';
 
 @Component({
   selector: 'cs-products',
@@ -28,6 +29,7 @@ import { ProductCardComponent } from '@shared/components/product-card/product-ca
     MatFormFieldModule,
     MatInputModule,
     ProductCardComponent,
+    ComingSoonComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './products.component.html',
@@ -48,6 +50,33 @@ export class ProductsComponent implements OnInit {
   readonly pageIndex = signal(0);
   readonly pageSize = signal(12);
   readonly loading = signal(false);
+
+  readonly upcomingProducts: ComingSoonItem[] = [
+    {
+      icon: 'precision_manufacturing',
+      title: 'Precast & Hollow-Core Slabs',
+      description: 'Factory-cast slabs for faster, cleaner, more accurate construction.',
+      tag: 'Q3 launch',
+    },
+    {
+      icon: 'roofing',
+      title: 'Steel Roofing Sheets',
+      description: 'Colour-coated TATA Durashine and JSW Vishwas roofing sheets — full warehouse stock.',
+      tag: 'Stocking soon',
+    },
+    {
+      icon: 'water',
+      title: 'PVC & CPVC Plumbing Systems',
+      description: 'Astral and Supreme pipes, fittings, and chemicals for plumbing & sanitation.',
+      tag: 'In review',
+    },
+    {
+      icon: 'bolt',
+      title: 'Electrical Conduits & Wiring',
+      description: 'Anchor, Polycab and Havells essentials for electrical first-fix supply.',
+      tag: 'Coming Q4',
+    },
+  ];
 
   ngOnInit(): void {
     this.api

@@ -7,11 +7,20 @@ import { catchError, map } from 'rxjs/operators';
 import { ApiService } from '@core/services/api.service';
 import { Category, Product } from '@core/models/domain.models';
 import { ProductCardComponent } from '@shared/components/product-card/product-card.component';
+import { RevealDirective } from '@shared/directives/reveal.directive';
+import { CountUpDirective } from '@shared/directives/count-up.directive';
 
 @Component({
   selector: 'cs-home',
   standalone: true,
-  imports: [CommonModule, RouterLink, MatIconModule, ProductCardComponent],
+  imports: [
+    CommonModule,
+    RouterLink,
+    MatIconModule,
+    ProductCardComponent,
+    RevealDirective,
+    CountUpDirective,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],

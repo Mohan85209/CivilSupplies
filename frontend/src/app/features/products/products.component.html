@@ -61,5 +61,12 @@
         (page)="onPageChange($event)"
       ></mat-paginator>
     }
+
+    <cs-coming-soon
+      heading="More categories on the way"
+      subheading="Be the first to know when these arrive — drop a quote request and we'll alert you on launch."
+      [items]="upcomingProducts"
+      variant="products"
+    />
   </div>
 </section>

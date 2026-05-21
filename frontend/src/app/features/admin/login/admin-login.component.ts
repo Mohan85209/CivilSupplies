@@ -40,10 +40,13 @@ export class AdminLoginComponent {
     this.submitting.set(true);
     this.auth.login(this.form.getRawValue()).subscribe({
       next: () => {
-        const redirect = this.route.snapshot.queryParamMap.get('redirect') || '/admin/dashboard';
+        const raw = this.route.snapshot.queryParamMap.get('redirect') ?? '/admin/dashboard';
+        // Only allow same-origin absolute paths (single leading slash, no scheme/host),
+        // to prevent open-redirect phishing via the `redirect=` query parameter.
+        const safe = /^\/(?!\/)[A-Za-z0-9_\-/?&=.%#]*$/.test(raw) ? raw : '/admin/dashboard';
         this.notify.success('Signed in successfully.');
         this.submitting.set(false);
-        void this.router.navigateByUrl(redirect);
+        void this.router.navigateByUrl(safe);
       },
       error: (err) => {
         this.submitting.set(false);

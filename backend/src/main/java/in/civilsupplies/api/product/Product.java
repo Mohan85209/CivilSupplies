@@ -21,7 +21,7 @@ public class Product extends BaseAuditable {
     @Column(nullable = false, length = 180, unique = true)
     private String slug;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
@@ -40,7 +40,7 @@ public class Product extends BaseAuditable {
     @Column(name = "is_active", nullable = false)
     private boolean active = true;
 
-    @Column(precision = 3, scale = 1)
+    @Column
     private Double rating;
 
     @Column(name = "review_count", nullable = false)

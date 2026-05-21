@@ -1,11 +1,22 @@
+:host { display: contents; }
 .site-header {
   position: fixed;
   top: 0; left: 0; right: 0;
   height: var(--header-height);
-  background: var(--color-bg);
-  border-bottom: 1px solid var(--color-border);
-  box-shadow: var(--shadow-sm);
+  background: rgba(255, 255, 255, 0.78);
+  border-bottom: 1px solid transparent;
+  box-shadow: none;
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
   z-index: 100;
+  transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+[data-theme='dark'] .site-header { background: rgba(11, 18, 38, 0.7); }
+
+:host(.is-scrolled) .site-header {
+  background: var(--color-bg);
+  border-bottom-color: var(--color-border);
+  box-shadow: var(--shadow-sm);
 }
 
 .header-inner {

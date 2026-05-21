@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostBinding, HostListener, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
@@ -24,7 +24,16 @@ export class SiteHeaderComponent {
   readonly theme = inject(ThemeService);
 
   readonly menuOpen = signal(false);
+  readonly scrolled = signal(false);
   readonly themeIcon = computed(() => (this.theme.theme() === 'dark' ? 'light_mode' : 'dark_mode'));
+
+  @HostBinding('class.is-scrolled')
+  get isScrolledClass(): boolean { return this.scrolled(); }
+
+  @HostListener('window:scroll')
+  onScroll(): void {
+    this.scrolled.set(window.scrollY > 12);
+  }
 
   readonly navLinks = [
     { label: 'Home', path: '/' },

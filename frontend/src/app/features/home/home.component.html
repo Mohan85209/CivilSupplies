@@ -1,40 +1,78 @@
 <section class="hero">
+  <div class="hero-bg" aria-hidden="true">
+    <span class="cs-blob cs-blob--orange blob-a"></span>
+    <span class="cs-blob cs-blob--navy blob-b"></span>
+    <span class="cs-blob cs-blob--white blob-c"></span>
+    <span class="hero-grid"></span>
+  </div>
+
   <div class="container hero-inner">
     <div class="hero-copy">
-      <span class="badge badge--orange">Civil Engineering Supplies · Hyderabad</span>
-      <h1>Build with confidence. <br/>Materials that meet the spec.</h1>
-      <p>
+      <span class="badge badge--orange" csReveal="fade-up">Civil Engineering Supplies · Hyderabad</span>
+      <h1 csReveal="fade-up" [csRevealDelay]="80">
+        Build with confidence. <br/>
+        Materials that <span class="cs-grad-text">meet the spec.</span>
+      </h1>
+      <p csReveal="fade-up" [csRevealDelay]="160">
         From cement and TMT steel to RMC and surveying instruments — we supply construction
         essentials and on-site services to builders and contractors across Telangana &amp; Andhra Pradesh.
       </p>
-      <div class="hero-cta">
+      <div class="hero-cta" csReveal="fade-up" [csRevealDelay]="240">
         <a routerLink="/quote" class="btn btn--primary"><mat-icon>request_quote</mat-icon> Get a project quote</a>
         <a routerLink="/products" class="btn btn--ghost">Browse catalog</a>
       </div>
-      <ul class="hero-stats">
-        <li><strong>500+</strong><span>Projects supplied</span></li>
-        <li><strong>24h</strong><span>Avg. quote turnaround</span></li>
-        <li><strong>15+</strong><span>Material categories</span></li>
+      <ul class="hero-stats" csReveal="fade-up" [csRevealDelay]="320">
+        <li>
+          <strong [csCountUp]="500" suffix="+">0</strong>
+          <span>Projects supplied</span>
+        </li>
+        <li>
+          <strong [csCountUp]="24" suffix="h">0</strong>
+          <span>Avg. quote turnaround</span>
+        </li>
+        <li>
+          <strong [csCountUp]="15" suffix="+">0</strong>
+          <span>Material categories</span>
+        </li>
       </ul>
     </div>
+
     <div class="hero-art" aria-hidden="true">
-      <div class="hero-tile hero-tile--1"><mat-icon>foundation</mat-icon><span>Cement</span></div>
-      <div class="hero-tile hero-tile--2"><mat-icon>construction</mat-icon><span>TMT Steel</span></div>
-      <div class="hero-tile hero-tile--3"><mat-icon>grain</mat-icon><span>Aggregates</span></div>
-      <div class="hero-tile hero-tile--4"><mat-icon>handyman</mat-icon><span>Tools</span></div>
+      <div class="hero-tile hero-tile--1 cs-bob" csReveal="scale-in" [csRevealDelay]="100">
+        <mat-icon>foundation</mat-icon><span>Cement</span>
+      </div>
+      <div class="hero-tile hero-tile--2 cs-bob" csReveal="scale-in" [csRevealDelay]="200" style="animation-delay: 0.5s">
+        <mat-icon>construction</mat-icon><span>TMT Steel</span>
+      </div>
+      <div class="hero-tile hero-tile--3 cs-bob" csReveal="scale-in" [csRevealDelay]="300" style="animation-delay: 1s">
+        <mat-icon>grain</mat-icon><span>Aggregates</span>
+      </div>
+      <div class="hero-tile hero-tile--4 cs-bob" csReveal="scale-in" [csRevealDelay]="400" style="animation-delay: 1.5s">
+        <mat-icon>handyman</mat-icon><span>Tools</span>
+      </div>
     </div>
   </div>
+
+  <a href="#categories" class="scroll-indicator" aria-label="Scroll down">
+    <mat-icon>keyboard_arrow_down</mat-icon>
+  </a>
 </section>
 
-<section class="section">
+<section class="section" id="categories">
   <div class="container">
-    <header class="section-header">
+    <header class="section-header" csReveal="fade-up">
       <h2>Browse by category</h2>
-      <a routerLink="/products" class="link-arrow">All products <mat-icon>arrow_forward</mat-icon></a>
+      <a routerLink="/products" class="link-arrow cs-link-anim">All products <mat-icon>arrow_forward</mat-icon></a>
     </header>
     <div class="categories-grid">
-      @for (c of (categories$ | async) ?? []; track c.id) {
-        <a [routerLink]="['/products']" [queryParams]="{ category: c.slug }" class="category-card">
+      @for (c of (categories$ | async) ?? []; track c.id; let i = $index) {
+        <a
+          [routerLink]="['/products']"
+          [queryParams]="{ category: c.slug }"
+          class="category-card cs-tilt"
+          csReveal="fade-up"
+          [csRevealDelay]="i * 70"
+        >
           <span class="category-icon" aria-hidden="true">
             <mat-icon>category</mat-icon>
           </span>
@@ -50,12 +88,12 @@
 
 <section class="section muted-bg">
   <div class="container">
-    <header class="section-header">
+    <header class="section-header" csReveal="fade-up">
       <h2>Why builders choose us</h2>
     </header>
     <div class="highlight-grid">
-      @for (h of highlights; track h.title) {
-        <div class="card highlight-card">
+      @for (h of highlights; track h.title; let i = $index) {
+        <div class="card highlight-card cs-tilt" csReveal="fade-up" [csRevealDelay]="i * 100">
           <span class="highlight-icon"><mat-icon>{{ h.icon }}</mat-icon></span>
           <h3>{{ h.title }}</h3>
           <p>{{ h.text }}</p>
@@ -67,13 +105,15 @@
 
 <section class="section">
   <div class="container">
-    <header class="section-header">
+    <header class="section-header" csReveal="fade-up">
       <h2>Recently added</h2>
-      <a routerLink="/products" class="link-arrow">See all <mat-icon>arrow_forward</mat-icon></a>
+      <a routerLink="/products" class="link-arrow cs-link-anim">See all <mat-icon>arrow_forward</mat-icon></a>
     </header>
     <div class="product-grid">
-      @for (p of (featured$ | async) ?? []; track p.id) {
-        <cs-product-card [product]="p" />
+      @for (p of (featured$ | async) ?? []; track p.id; let i = $index) {
+        <div csReveal="fade-up" [csRevealDelay]="i * 80">
+          <cs-product-card [product]="p" />
+        </div>
       } @empty {
         <p class="text-muted">No products to display yet.</p>
       }
@@ -83,13 +123,14 @@
 
 <section class="section muted-bg">
   <div class="container">
-    <header class="section-header">
+    <header class="section-header" csReveal="fade-up">
       <h2>What customers say</h2>
     </header>
     <div class="testimonial-grid">
-      @for (t of testimonials; track t.name) {
-        <figure class="card">
-          <blockquote>"{{ t.quote }}"</blockquote>
+      @for (t of testimonials; track t.name; let i = $index) {
+        <figure class="card cs-tilt" csReveal="fade-up" [csRevealDelay]="i * 120">
+          <span class="quote-mark" aria-hidden="true">"</span>
+          <blockquote>{{ t.quote }}</blockquote>
           <figcaption>
             <strong>{{ t.name }}</strong>
             <small>{{ t.role }}</small>
@@ -101,11 +142,17 @@
 </section>
 
 <section class="cta-band">
+  <div class="cta-bg" aria-hidden="true">
+    <span class="cs-blob cs-blob--white" style="width: 320px; height: 320px; top: -120px; right: -40px;"></span>
+    <span class="cs-blob cs-blob--navy" style="width: 260px; height: 260px; bottom: -100px; left: 10%;"></span>
+  </div>
   <div class="container cta-inner">
-    <div>
+    <div csReveal="slide-right">
       <h2>Ready to submit your project BOQ?</h2>
       <p>Upload your bill of quantities and we'll revert with a consolidated quote within 24 hours.</p>
     </div>
-    <a routerLink="/quote" class="btn btn--primary"><mat-icon>upload_file</mat-icon> Submit BOQ</a>
+    <a routerLink="/quote" class="btn btn--primary cta-btn" csReveal="slide-left">
+      <mat-icon>upload_file</mat-icon> Submit BOQ
+    </a>
   </div>
 </section>

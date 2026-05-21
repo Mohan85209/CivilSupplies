@@ -27,3 +27,13 @@ Thumbs.db
 
 # Misc local junk
 .claude/settings.local.json
+.claude/worktrees/
+
+# External tool artifacts (not part of this project)
+.codecarbon-tracker.pid
+.codecarbon.*
+emissions.csv
+.sixth/
+
+# Logs / temp
+*.log

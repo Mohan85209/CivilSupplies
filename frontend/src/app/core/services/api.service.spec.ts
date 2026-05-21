@@ -30,7 +30,7 @@ describe('ApiService', () => {
   });
 
   it('submitEnquiry POSTs to /enquiries', () => {
-    const body = { name: 'Test', phone: '9876543210', email: 't@x.com' };
+    const body = { name: 'Test', phone: '9505056386', email: 't@x.com' };
     api.submitEnquiry(body).subscribe();
     const req = httpMock.expectOne(`${environment.apiUrl}/enquiries`);
     expect(req.request.method).toBe('POST');

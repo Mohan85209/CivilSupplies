@@ -6,7 +6,8 @@
         <h2>Product not found</h2>
         <a routerLink="/products" class="btn btn--secondary">Back to catalog</a>
       </div>
-    } @else if (product(); as p) {
+    } @else {
+      @if (product(); as p) {
       <nav aria-label="Breadcrumb" class="breadcrumb">
         <a routerLink="/">Home</a>
         <mat-icon>chevron_right</mat-icon>
@@ -70,8 +71,9 @@
           <p>Project rates for orders above 50 units — submit your BOQ for a consolidated quote.</p>
         </article>
       </section>
-    } @else {
-      <p class="text-muted text-center">Loading product details…</p>
+      } @else {
+        <p class="text-muted text-center">Loading product details…</p>
+      }
     }
   </div>
 </section>

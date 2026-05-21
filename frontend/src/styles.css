@@ -146,6 +146,158 @@ a:hover { color: var(--color-orange); }
   margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0;
 }
 
+/* =============================================================
+   Animations — reveal on scroll, blobs, gradient text, etc.
+   ============================================================= */
+
+/* Reveal directive: hidden until .cs-reveal-in is added by IntersectionObserver */
+.cs-reveal {
+  --cs-reveal-delay: 0ms;
+  opacity: 0;
+  transition:
+    opacity 700ms cubic-bezier(0.22, 1, 0.36, 1) var(--cs-reveal-delay),
+    transform 700ms cubic-bezier(0.22, 1, 0.36, 1) var(--cs-reveal-delay),
+    filter 700ms ease var(--cs-reveal-delay);
+  will-change: opacity, transform;
+}
+.cs-reveal--fade-up    { transform: translate3d(0, 28px, 0); }
+.cs-reveal--fade-in    { transform: none; }
+.cs-reveal--slide-right { transform: translate3d(-32px, 0, 0); }
+.cs-reveal--slide-left  { transform: translate3d(32px, 0, 0); }
+.cs-reveal--scale-in    { transform: scale(0.92); }
+.cs-reveal-in {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* Gradient animated text */
+.cs-grad-text {
+  background: linear-gradient(120deg, #ffffff 0%, #ffd6a8 40%, var(--color-orange) 60%, #ffffff 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: cs-grad-shift 6s ease-in-out infinite;
+}
+@keyframes cs-grad-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
+}
+
+/* Animated blobs (used in hero) */
+.cs-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.5;
+  pointer-events: none;
+  will-change: transform;
+}
+.cs-blob--orange { background: var(--color-orange); }
+.cs-blob--navy   { background: #2a4a92; }
+.cs-blob--white  { background: #ffffff; opacity: 0.18; }
+@keyframes cs-float-a {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50%      { transform: translate3d(40px, -20px, 0) scale(1.08); }
+}
+@keyframes cs-float-b {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50%      { transform: translate3d(-30px, 30px, 0) scale(0.95); }
+}
+@keyframes cs-float-c {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50%      { transform: translate3d(20px, 30px, 0) scale(1.05); }
+}
+
+/* Shimmer (loading / accent sweep) */
+@keyframes cs-shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.cs-shimmer {
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.18) 50%, transparent 100%);
+  background-size: 200% 100%;
+  animation: cs-shimmer 2.2s linear infinite;
+}
+
+/* Pulse (used by FAB and CTA) */
+@keyframes cs-pulse-ring {
+  0%   { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.55); }
+  70%  { box-shadow: 0 0 0 16px rgba(37, 211, 102, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+}
+.cs-pulse { animation: cs-pulse-ring 2.4s ease-out infinite; }
+
+/* Tilt-on-hover for cards */
+.cs-tilt {
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease;
+  transform-style: preserve-3d;
+}
+.cs-tilt:hover {
+  transform: translateY(-6px) rotateX(2deg) rotateY(-2deg);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Underline-grow effect for links */
+.cs-link-anim {
+  position: relative;
+  display: inline-block;
+}
+.cs-link-anim::after {
+  content: '';
+  position: absolute;
+  left: 0; bottom: -2px;
+  width: 100%;
+  height: 2px;
+  background: var(--color-orange);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.cs-link-anim:hover::after { transform: scaleX(1); transform-origin: left; }
+
+/* Button micro-interaction */
+.btn { position: relative; overflow: hidden; }
+.btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(255,255,255,0.25), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.btn:hover::before { opacity: 1; }
+
+/* Image zoom on card hover */
+.cs-zoom { overflow: hidden; }
+.cs-zoom > .cs-zoom-target {
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.cs-zoom:hover > .cs-zoom-target { transform: scale(1.06); }
+
+/* Floaty bounce (subtle, for hero tiles) */
+@keyframes cs-bob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
+}
+.cs-bob { animation: cs-bob 4s ease-in-out infinite; }
+
+/* Reduced motion users get no animation */
+@media (prefers-reduced-motion: reduce) {
+  .cs-reveal,
+  .cs-grad-text,
+  .cs-blob,
+  .cs-shimmer,
+  .cs-pulse,
+  .cs-tilt,
+  .cs-bob {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}
+
 /* ---------- Responsive ---------- */
 @media (max-width: 768px) {
   .section { padding: 2.5rem 0; }

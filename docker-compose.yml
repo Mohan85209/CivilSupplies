@@ -43,8 +43,9 @@ services:
       SMTP_PORT: ${SMTP_PORT:-587}
       SMTP_USER: ${SMTP_USER:-}
       SMTP_PASS: ${SMTP_PASS:-}
-      MAIL_FROM: ${MAIL_FROM:-no-reply@civilsupplies.in}
-      ADMIN_NOTIFY_TO: ${ADMIN_NOTIFY_TO:-sales@civilsupplies.in}
+      MAIL_FROM: ${MAIL_FROM:-bellamsudheer19@gmail.com}
+      ADMIN_NOTIFY_TO: ${ADMIN_NOTIFY_TO:-bellamsudheer19@gmail.com}
+      CONTACT_PHONE: ${CONTACT_PHONE:-+91 95050 56386}
       UPLOAD_DIR: /app/uploads
     volumes:
       - uploads:/app/uploads

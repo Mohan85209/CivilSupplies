@@ -24,7 +24,7 @@ class EnquiryServiceTest {
     @Test
     void createPersistsEnquiryAndNotifiesAdmin() {
         var dto = new EnquiryDto.Create(
-                "Ravi Reddy", "9876543210", "Ravi@Example.COM",
+                "Ravi Reddy", "9505056386", "Ravi@Example.COM",
                 "Hyderabad", "Commercial", List.of("Cement", "TMT Steel"),
                 "50 tons", "Need quote for slab"
         );

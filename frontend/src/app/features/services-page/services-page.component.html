@@ -10,8 +10,8 @@
     </header>
 
     <div class="services-grid">
-      @for (s of services; track s.title) {
-        <article class="card service-card">
+      @for (s of services; track s.title; let i = $index) {
+        <article class="card service-card cs-tilt" csReveal="fade-up" [csRevealDelay]="i * 80">
           <span class="service-icon"><mat-icon>{{ s.icon }}</mat-icon></span>
           <h3>{{ s.title }}</h3>
           <p>{{ s.text }}</p>
@@ -19,7 +19,7 @@
       }
     </div>
 
-    <aside class="process-band card">
+    <aside class="process-band card" csReveal="fade-up">
       <h2>How we work with you</h2>
       <ol class="process-steps">
         <li><strong>1. Share your BOQ</strong><span>Upload your bill of quantities or share a brief — we'll review and clarify any gaps.</span></li>
@@ -28,5 +28,12 @@
         <li><strong>4. Ongoing support</strong><span>Technical assistance, MTCs, and reorders are a phone call away.</span></li>
       </ol>
     </aside>
+
+    <cs-coming-soon
+      heading="New services launching soon"
+      subheading="We're expanding our offering — let us know if any of these would help your next project."
+      [items]="upcomingServices"
+      variant="services"
+    />
   </div>
 </section>

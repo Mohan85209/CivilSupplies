@@ -28,7 +28,7 @@ class EnquiryControllerIT {
     void submitEnquiry_returns201() throws Exception {
         var payload = Map.of(
                 "name", "Anitha Sharma",
-                "phone", "9876543210",
+                "phone", "9505056386",
                 "email", "anitha@example.com",
                 "city", "Hyderabad",
                 "projectType", "Residential",

@@ -32,7 +32,7 @@ public record AppProperties(
             String s3Region
     ) {}
 
-    public record Notification(String from, String adminTo) {}
+    public record Notification(String from, String adminTo, String contactPhone) {}
 
     public record RateLimit(
             int enquiriesPerHour,
