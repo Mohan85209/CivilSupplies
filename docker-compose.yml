@@ -1,44 +1,72 @@
-version: '3.8'
-
 services:
   postgres:
     image: postgres:16-alpine
+    container_name: civilsupplies-postgres
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: civilsupplies
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_DB: ${DB_NAME:-civilsupplies}
     volumes:
       - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d civilsupplies"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-civilsupplies}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: civilsupplies-redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
       interval: 10s
       timeout: 5s
       retries: 5
 
   backend:
-    build: ./backend
-    env_file: .env
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: civilsupplies-backend
     environment:
-      DATABASE_URL: ${DATABASE_URL:-postgresql+psycopg2://postgres:postgres@postgres:5432/civilsupplies}
-      SECRET_KEY: ${SECRET_KEY}
-      JWT_EXPIRE_MINUTES: ${JWT_EXPIRE_MINUTES:-1440}
-      UPLOAD_DIR: ${UPLOAD_DIR:-./uploads}
+      APP_PROFILE: prod
+      DATABASE_URL: jdbc:postgresql://postgres:5432/${DB_NAME:-civilsupplies}
+      DB_USER: ${DB_USER:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD:-postgres}
+      JWT_SECRET: ${JWT_SECRET:-change-me-please-this-is-a-dev-only-secret-change-in-prod}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost,http://localhost:4200}
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASS: ${SMTP_PASS:-}
+      MAIL_FROM: ${MAIL_FROM:-bellamsudheer19@gmail.com}
+      ADMIN_NOTIFY_TO: ${ADMIN_NOTIFY_TO:-bellamsudheer19@gmail.com}
+      CONTACT_PHONE: ${CONTACT_PHONE:-+91 95050 56386}
+      UPLOAD_DIR: /app/uploads
+    volumes:
+      - uploads:/app/uploads
     depends_on:
       postgres:
         condition: service_healthy
+      redis:
+        condition: service_healthy
     ports:
-      - "8000:8000"
-    volumes:
-      - ./backend/uploads:/app/uploads
+      - "8080:8080"
 
   frontend:
-    build: ./frontend
-    environment:
-      NEXT_PUBLIC_API_URL: http://localhost:8000
-    ports:
-      - "3000:3000"
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: civilsupplies-frontend
     depends_on:
       - backend
+    ports:
+      - "80:80"
 
 volumes:
   pgdata:
+  uploads:

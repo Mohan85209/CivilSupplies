@@ -1,0 +1,34 @@
+<section class="coming-soon" [class.coming-soon--services]="variant === 'services'">
+  <div class="cs-decor" aria-hidden="true">
+    <span class="cs-decor-blob cs-decor-blob--a"></span>
+    <span class="cs-decor-blob cs-decor-blob--b"></span>
+  </div>
+
+  <header class="coming-soon__head" csReveal="fade-up">
+    <span class="badge badge--orange coming-soon__chip">
+      <span class="dot"></span> Coming soon
+    </span>
+    <h2 class="coming-soon__title">{{ heading }}</h2>
+    @if (subheading) {
+      <p class="coming-soon__sub">{{ subheading }}</p>
+    }
+  </header>
+
+  <div class="coming-soon__grid">
+    @for (item of items; track item.title; let i = $index) {
+      <article class="coming-soon__card" csReveal="fade-up" [csRevealDelay]="i * 90">
+        <div class="coming-soon__card-inner">
+          <span class="coming-soon__icon">
+            <mat-icon>{{ item.icon }}</mat-icon>
+          </span>
+          @if (item.tag) {
+            <span class="coming-soon__tag">{{ item.tag }}</span>
+          }
+          <h3>{{ item.title }}</h3>
+          <p>{{ item.description }}</p>
+          <span class="coming-soon__ribbon" aria-hidden="true">Coming Soon</span>
+        </div>
+      </article>
+    }
+  </div>
+</section>
