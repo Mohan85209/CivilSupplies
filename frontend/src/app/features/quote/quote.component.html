@@ -1,0 +1,116 @@
+<section class="section">
+  <div class="container quote-grid">
+    <aside class="quote-info">
+      <span class="badge badge--orange">Request a quote</span>
+      <h1>Tell us about your project.</h1>
+      <p class="text-muted">Share your BOQ and timeline — you'll receive a consolidated, project-rate quote within 24 hours.</p>
+      <ol class="quote-steps">
+        <li><strong>1. Share contact details</strong><span>So we can reach you with the quote.</span></li>
+        <li><strong>2. Describe the project</strong><span>Site, materials, and timeline give us context.</span></li>
+        <li><strong>3. Upload BOQ (optional)</strong><span>PDF, Excel, or image — up to 10 MB.</span></li>
+      </ol>
+      <div class="card pledge-card">
+        <h3><mat-icon>verified_user</mat-icon> Our promise</h3>
+        <ul>
+          <li>No spam. Your details stay with us.</li>
+          <li>Transparent quote with itemised pricing.</li>
+          <li>Phased delivery aligned to your schedule.</li>
+        </ul>
+      </div>
+    </aside>
+
+    <div class="quote-form card">
+      @if (submitted()) {
+        <div class="success-state">
+          <mat-icon>check_circle</mat-icon>
+          <h2>Quote request received</h2>
+          <p>Thanks! Our team is reviewing your details and will revert within 24 hours.</p>
+          <a routerLink="/products" class="btn btn--secondary">Browse more products</a>
+        </div>
+      } @else {
+        <mat-stepper linear orientation="vertical" #stepper>
+          <mat-step [stepControl]="contactForm" label="Your contact details">
+            <form [formGroup]="contactForm">
+              <mat-form-field appearance="outline">
+                <mat-label>Full name</mat-label>
+                <input matInput formControlName="name" required />
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Phone</mat-label>
+                <input matInput formControlName="phone" required inputmode="tel" />
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Email</mat-label>
+                <input matInput formControlName="email" required type="email" />
+              </mat-form-field>
+              <div class="step-actions">
+                <button mat-button matStepperNext class="btn btn--secondary" type="button">Next</button>
+              </div>
+            </form>
+          </mat-step>
+
+          <mat-step [stepControl]="projectForm" label="Project details">
+            <form [formGroup]="projectForm">
+              <mat-form-field appearance="outline">
+                <mat-label>Site location</mat-label>
+                <input matInput formControlName="siteLocation" required placeholder="Locality, city" />
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Timeline</mat-label>
+                <mat-select formControlName="timeline" required>
+                  @for (t of timelines; track t) {
+                    <mat-option [value]="t">{{ t }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Project details</mat-label>
+                <textarea matInput formControlName="projectDetails" rows="5" required placeholder="Briefly describe the project, materials needed, quantities, and any specifications."></textarea>
+              </mat-form-field>
+              <div class="step-actions">
+                <button mat-button matStepperPrevious type="button" class="btn btn--ghost">Back</button>
+                <button mat-button matStepperNext type="button" class="btn btn--secondary">Next</button>
+              </div>
+            </form>
+          </mat-step>
+
+          <mat-step label="Upload BOQ (optional)">
+            <div class="upload-zone" [class.has-file]="!!boqFile()">
+              @if (!boqFile()) {
+                <label class="upload-label">
+                  <input type="file" accept=".pdf,.xls,.xlsx,.csv,image/*" (change)="onFile($event)" hidden />
+                  <mat-icon>upload_file</mat-icon>
+                  <strong>Click to upload BOQ</strong>
+                  <small>PDF, Excel, CSV or image · up to 10 MB</small>
+                </label>
+              } @else {
+                <div class="file-row">
+                  <mat-icon>description</mat-icon>
+                  <div>
+                    <strong>{{ boqFile()!.name }}</strong>
+                    <small>{{ (boqFile()!.size / 1024 / 1024) | number:'1.1-2' }} MB</small>
+                  </div>
+                  <button mat-icon-button (click)="clearFile()" aria-label="Remove file"><mat-icon>close</mat-icon></button>
+                </div>
+              }
+            </div>
+            @if (fileError()) { <small class="form-error">{{ fileError() }}</small> }
+
+            <div class="step-actions">
+              <button mat-button matStepperPrevious type="button" class="btn btn--ghost">Back</button>
+              <button
+                type="button"
+                (click)="submit()"
+                class="btn btn--primary"
+                [disabled]="submitting() || contactForm.invalid || projectForm.invalid"
+              >
+                <mat-icon>send</mat-icon>
+                {{ submitting() ? 'Sending…' : 'Submit quote request' }}
+              </button>
+            </div>
+          </mat-step>
+        </mat-stepper>
+      }
+    </div>
+  </div>
+</section>
