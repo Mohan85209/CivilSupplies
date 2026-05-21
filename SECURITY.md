@@ -10,7 +10,7 @@ If you believe you have found a security issue, please **do not** open a public 
 
 Email the maintainer privately:
 
-- **Mohan Kumar Satyavarapu** — `mohankumarsatyavarapu225@gmail.com`
+- **Sudheer Bellam** — `bellamsudheer19@gmail.com`
 
 Please include:
 
