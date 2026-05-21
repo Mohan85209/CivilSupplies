@@ -1,20 +1,18 @@
-FROM node:20-alpine AS builder
-
+# ---------- build stage ----------
+FROM node:20-alpine AS build
 WORKDIR /app
-
-COPY package.json package-lock.json* ./
-RUN if [ -f package-lock.json ]; then npm ci --legacy-peer-deps; else npm install --legacy-peer-deps; fi
-
+COPY package*.json ./
+RUN npm ci --no-audit --prefer-offline
 COPY . .
 RUN npm run build
 
-FROM node:20-alpine AS runner
-WORKDIR /app
-ENV NODE_ENV=production
+# ---------- runtime stage (nginx) ----------
+FROM nginx:1.31-alpine
+COPY --from=build /app/dist/civil-supplies/browser /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+EXPOSE 80
 
-# Next.js standalone output
-COPY --from=builder /app/.next/standalone .
-COPY --from=builder /app/public ./public
+HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
+  CMD wget --no-verbose --tries=1 --spider http://localhost/ || exit 1
 
-EXPOSE 3000
-CMD ["node", "server.js"]
+CMD ["nginx", "-g", "daemon off;"]

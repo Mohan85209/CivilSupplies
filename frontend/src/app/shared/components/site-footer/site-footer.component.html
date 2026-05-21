@@ -1,0 +1,55 @@
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <section class="footer-brand">
+      <h3>Civil Supplies</h3>
+      <p>Hyderabad-based one-stop supplier of construction materials and services for builders and contractors across Telangana &amp; Andhra Pradesh.</p>
+      <div class="footer-meta">
+        <span><mat-icon>business</mat-icon> GST: {{ gst }}</span>
+        <span><mat-icon>location_on</mat-icon> Hyderabad, Telangana</span>
+      </div>
+    </section>
+
+    <section>
+      <h4>Explore</h4>
+      <ul>
+        <li><a routerLink="/products">Products</a></li>
+        <li><a routerLink="/services">Services</a></li>
+        <li><a routerLink="/about">About</a></li>
+        <li><a routerLink="/contact">Contact</a></li>
+      </ul>
+    </section>
+
+    <section>
+      <h4>Customer</h4>
+      <ul>
+        <li><a routerLink="/quote">Request a Quote</a></li>
+        <li><a routerLink="/wishlist">Wishlist</a></li>
+        <li><a routerLink="/admin/login">Admin</a></li>
+      </ul>
+    </section>
+
+    <section class="footer-newsletter">
+      <h4>Get supply alerts</h4>
+      <p>Monthly updates on cement, TMT, and aggregate pricing trends.</p>
+      <form [formGroup]="newsletterForm" (ngSubmit)="subscribe()" class="newsletter-form">
+        <input
+          type="email"
+          formControlName="email"
+          placeholder="you@example.com"
+          aria-label="Email address"
+        />
+        <button class="btn btn--primary" type="submit">
+          <mat-icon>send</mat-icon>
+        </button>
+      </form>
+      @if (newsletterForm.controls.email.touched && newsletterForm.controls.email.invalid) {
+        <small class="form-error">Please enter a valid email.</small>
+      }
+    </section>
+  </div>
+
+  <div class="container footer-bottom">
+    <small>&copy; {{ year }} Civil Supplies. All rights reserved.</small>
+    <small>Built with Angular &amp; Spring Boot</small>
+  </div>
+</footer>
