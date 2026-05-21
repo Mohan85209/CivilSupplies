@@ -1,100 +1,79 @@
-# Civil Supplies Backend (FastAPI)
+# Civil Supplies — Spring Boot Backend
 
-Backend service for the Civil Supplies monorepo. Handles enquiries, RFQ quotes with BOQ uploads, the product/category catalog, and admin auth.
+Spring Boot 3.2 REST API for the Civil Supplies B2B portal.
 
 ## Stack
-- **FastAPI** — web framework
-- **SQLAlchemy 2.x** (typed) — ORM, SQLite by default, Postgres via `DATABASE_URL`
-- **Pydantic v2** — validation
-- **slowapi** — rate limiting
-- **passlib[bcrypt] + python-jose** — password hashing and JWT for admin
-- **smtplib** — email notifications
 
-## Setup
+- **Java 17 + Spring Boot 3.2**
+- **Spring MVC** (REST controllers)
+- **Spring Data JPA / Hibernate**
+- **PostgreSQL** (prod) / **H2** (dev)
+- **Flyway** migrations
+- **Spring Security + JWT** (HS256) with **RBAC** (ROLE_ADMIN / ROLE_STAFF / ROLE_VIEWER)
+- **Bucket4j** rate limiting for public endpoints
+- **JavaMailSender** (SMTP) for admin notifications
+- **Springdoc OpenAPI** at `/swagger-ui.html`
+- **Micrometer + Prometheus** at `/actuator/prometheus`
 
-All commands assume you are in the `backend/` folder of the monorepo.
-
-```bash
-cd backend
-
-# 1. Virtualenv
-python -m venv venv
-source venv/bin/activate          # Windows: venv\Scripts\activate
-
-# 2. Deps
-pip install -r requirements.txt
-
-# 3. Env
-cp .env.example .env
-# Edit .env: set SECRET_KEY, SEED_ADMIN_PASSWORD, SMTP_*, etc.
-
-# 4. Seed (idempotent — categories, products, admin user)
-python scripts/seed.py
-
-# 5. Run
-uvicorn app.main:app --reload --port 8000
-```
-
-Open `http://localhost:8000/docs` for Swagger UI.
-
-## Tests
+## Quick start (dev profile, H2 in-memory)
 
 ```bash
-pytest -q
+./mvnw spring-boot:run
+# or
+mvn spring-boot:run -Dspring-boot.run.profiles=dev
 ```
 
-## Endpoints
+The default admin login is seeded on first run:
 
-| Method & Path | Auth | Purpose |
-|---|---|---|
-| `POST /api/enquiries` | public, rate-limited | Submit contact form |
-| `GET /api/enquiries` | admin (JWT) | List enquiries |
-| `PATCH /api/enquiries/{id}` | admin | Update status |
-| `POST /api/quotes` | public, rate-limited | Submit RFQ + BOQ upload |
-| `GET /api/quotes` | admin | List quotes |
-| `GET /api/quotes/{id}/boq` | admin | Download BOQ file |
-| `GET /api/products` | public | Filter by `category`, `q`, paginate |
-| `GET /api/products/{slug}` | public | Product detail |
-| `GET /api/categories` | public | All categories |
-| `POST /api/admin/login` | public | Returns JWT |
-| `GET /api/admin/me` | admin | Current admin |
-| `GET /health` | public | Liveness probe |
+- Email: `admin@civilsupplies.in`
+- Password: `ChangeMe123!`
 
-## Project structure
+Change it via `POST /api/admin/users` (ROLE_ADMIN) and disable the seeded account in production.
 
-```
-backend/
-├── app/
-│   ├── main.py              FastAPI app, CORS, rate limiting
-│   ├── config.py            Settings from .env
-│   ├── database.py          SQLAlchemy engine + session
-│   ├── auth.py              JWT signing + get_current_admin dep
-│   ├── models.py            ORM models
-│   ├── schemas.py           Pydantic validation
-│   ├── email_service.py     SMTP notifier
-│   ├── storage.py           local / S3 file storage
-│   └── routers/
-│       ├── enquiries.py
-│       ├── quotes.py
-│       ├── products.py
-│       ├── categories.py
-│       └── admin.py
-├── scripts/seed.py
-├── tests/
-├── requirements.txt
-├── .env.example
-└── README.md
-```
-
-## Switching to Postgres
+## Build
 
 ```bash
-pip install psycopg2-binary
+mvn clean package -DskipTests
+java -jar target/civilsupplies-api.jar
 ```
 
-In `.env`:
-```
-DATABASE_URL=postgresql+psycopg2://user:password@localhost:5432/civil_supplies
+## Test
+
+```bash
+mvn test
 ```
 
-Tables auto-create on startup. Use Alembic once the schema stabilizes.
+## Endpoints (summary)
+
+| Method | Path                       | Auth         | Notes                     |
+|--------|----------------------------|--------------|---------------------------|
+| GET    | /api/products              | public       | filter: category, q       |
+| GET    | /api/products/{slug}       | public       |                           |
+| GET    | /api/categories            | public       |                           |
+| POST   | /api/enquiries             | public, RL   | rate-limited              |
+| GET    | /api/enquiries             | auth         | paginated                 |
+| PATCH  | /api/enquiries/{id}        | ADMIN/STAFF  | status update             |
+| POST   | /api/quotes                | public, RL   | multipart with BOQ file   |
+| GET    | /api/quotes                | auth         |                           |
+| PATCH  | /api/quotes/{id}           | ADMIN/STAFF  |                           |
+| GET    | /api/quotes/{id}/boq       | auth         | returns URL               |
+| POST   | /api/newsletter/subscribe  | public, RL   |                           |
+| POST   | /api/admin/login           | public       | returns JWT + refresh     |
+| POST   | /api/admin/refresh         | public       |                           |
+| GET    | /api/admin/me              | auth         |                           |
+| GET    | /api/admin/users           | ADMIN/STAFF  |                           |
+| POST   | /api/admin/users           | ADMIN        |                           |
+| GET    | /health                    | public       |                           |
+
+## Environment variables
+
+See `.env.example` at the repo root. Notable ones:
+
+| Var            | Purpose                          |
+|----------------|----------------------------------|
+| DATABASE_URL   | JDBC URL (PostgreSQL in prod)    |
+| JWT_SECRET     | HMAC secret (>= 32 bytes)        |
+| SMTP_HOST/USER/PASS | Mail server credentials     |
+| UPLOAD_DIR     | BOQ upload directory             |
+| CORS_ORIGINS   | Comma-separated allowed origins  |
+| APP_PROFILE    | dev / prod                       |
