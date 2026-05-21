@@ -1,0 +1,62 @@
+<header class="site-header">
+  <div class="container header-inner">
+    <a routerLink="/" class="brand" (click)="closeMenu()">
+      <span class="brand-mark" aria-hidden="true">CS</span>
+      <span class="brand-text">
+        <strong>Civil Supplies</strong>
+        <small>Construction materials & services</small>
+      </span>
+    </a>
+
+    <nav class="primary-nav" [class.is-open]="menuOpen()" aria-label="Primary navigation">
+      @for (link of navLinks; track link.path) {
+        <a
+          [routerLink]="link.path"
+          routerLinkActive="is-active"
+          [routerLinkActiveOptions]="{ exact: link.path === '/' }"
+          (click)="closeMenu()"
+        >{{ link.label }}</a>
+      }
+    </nav>
+
+    <div class="actions">
+      <a routerLink="/wishlist" matBadgeColor="warn" [matBadge]="wishlist.count() || null" aria-label="Wishlist" class="icon-link hide-mobile">
+        <mat-icon>favorite_border</mat-icon>
+      </a>
+
+      <button mat-icon-button (click)="toggleTheme()" aria-label="Toggle theme" class="hide-mobile">
+        <mat-icon>{{ themeIcon() }}</mat-icon>
+      </button>
+
+      @if (auth.isAuthenticated()) {
+        <button mat-button [matMenuTriggerFor]="adminMenu" class="hide-mobile">
+          <mat-icon>admin_panel_settings</mat-icon>
+          {{ auth.user()?.email }}
+        </button>
+        <mat-menu #adminMenu="matMenu">
+          <a mat-menu-item routerLink="/admin/dashboard"><mat-icon>dashboard</mat-icon> Dashboard</a>
+          <button mat-menu-item (click)="auth.logout()"><mat-icon>logout</mat-icon> Logout</button>
+        </mat-menu>
+      } @else {
+        <a routerLink="/admin/login" class="hide-mobile" mat-button>
+          <mat-icon>login</mat-icon> Admin
+        </a>
+      }
+
+      <a class="btn btn--primary cta-quote" (click)="goToQuote()">
+        <mat-icon>request_quote</mat-icon>
+        <span>Get Quote</span>
+      </a>
+
+      <button
+        class="menu-toggle hide-desktop"
+        (click)="toggleMenu()"
+        [attr.aria-expanded]="menuOpen()"
+        aria-label="Toggle menu"
+        mat-icon-button
+      >
+        <mat-icon>{{ menuOpen() ? 'close' : 'menu' }}</mat-icon>
+      </button>
+    </div>
+  </div>
+</header>
