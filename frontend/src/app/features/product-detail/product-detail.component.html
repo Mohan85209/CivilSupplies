@@ -1,0 +1,77 @@
+<section class="section">
+  <div class="container">
+    @if (notFound()) {
+      <div class="card empty-state text-center">
+        <mat-icon>error_outline</mat-icon>
+        <h2>Product not found</h2>
+        <a routerLink="/products" class="btn btn--secondary">Back to catalog</a>
+      </div>
+    } @else if (product(); as p) {
+      <nav aria-label="Breadcrumb" class="breadcrumb">
+        <a routerLink="/">Home</a>
+        <mat-icon>chevron_right</mat-icon>
+        <a routerLink="/products">Products</a>
+        <mat-icon>chevron_right</mat-icon>
+        <span>{{ p.name }}</span>
+      </nav>
+
+      <div class="detail-grid">
+        <figure class="detail-image" [style.backgroundImage]="'url(' + (p.imageUrl || '/assets/images/placeholder.svg') + ')'">
+          @if (p.brand) { <figcaption class="badge badge--orange">{{ p.brand }}</figcaption> }
+        </figure>
+
+        <div class="detail-body">
+          @if (p.categoryName) { <span class="badge">{{ p.categoryName }}</span> }
+          <h1>{{ p.name }}</h1>
+
+          @if (p.rating != null) {
+            <div class="rating">
+              <mat-icon>star</mat-icon>
+              <strong>{{ p.rating | number:'1.1-1' }}</strong>
+              <span class="text-muted">({{ p.reviewCount ?? 0 }} reviews)</span>
+            </div>
+          }
+
+          @if (p.description) { <p class="lede">{{ p.description }}</p> }
+
+          <dl class="spec-list">
+            @if (p.brand) { <div><dt>Brand</dt><dd>{{ p.brand }}</dd></div> }
+            @if (p.unit) { <div><dt>Unit</dt><dd>{{ p.unit }}</dd></div> }
+            <div><dt>SKU</dt><dd>CS-{{ p.id }}</dd></div>
+            <div><dt>Availability</dt><dd>{{ p.isActive ? 'In stock' : 'Limited' }}</dd></div>
+          </dl>
+
+          <div class="cta-row">
+            <a [routerLink]="['/quote']" [queryParams]="{ product: p.slug }" class="btn btn--primary">
+              <mat-icon>request_quote</mat-icon> Request Quote
+            </a>
+            <button class="btn btn--ghost" (click)="toggleWishlist()">
+              <mat-icon>{{ wishlist.has(p.id) ? 'favorite' : 'favorite_border' }}</mat-icon>
+              {{ wishlist.has(p.id) ? 'Saved to wishlist' : 'Save to wishlist' }}
+            </button>
+            <a routerLink="/contact" class="btn btn--ghost">
+              <mat-icon>chat</mat-icon> Ask a question
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <section class="info-cards">
+        <article class="card">
+          <h3><mat-icon>local_shipping</mat-icon> Delivery</h3>
+          <p>Same-day dispatch within Hyderabad; 1–3 day delivery across Telangana and Andhra Pradesh.</p>
+        </article>
+        <article class="card">
+          <h3><mat-icon>verified</mat-icon> Quality assured</h3>
+          <p>Authorised supplier with mill test certificates available on request.</p>
+        </article>
+        <article class="card">
+          <h3><mat-icon>support_agent</mat-icon> Bulk pricing</h3>
+          <p>Project rates for orders above 50 units — submit your BOQ for a consolidated quote.</p>
+        </article>
+      </section>
+    } @else {
+      <p class="text-muted text-center">Loading product details…</p>
+    }
+  </div>
+</section>

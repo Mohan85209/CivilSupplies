@@ -1,0 +1,40 @@
+<article class="product-card card">
+  <a [routerLink]="['/products', product.slug]" class="card-link">
+    <div class="card-image" [style.backgroundImage]="'url(' + (product.imageUrl || '/assets/images/placeholder.svg') + ')'">
+      @if (product.brand) {
+        <span class="badge badge--orange brand-pill">{{ product.brand }}</span>
+      }
+      <button
+        mat-icon-button
+        class="wishlist-btn"
+        (click)="toggleWishlist($event)"
+        [attr.aria-label]="wishlist.has(product.id) ? 'Remove from wishlist' : 'Add to wishlist'"
+      >
+        <mat-icon>{{ wishlist.has(product.id) ? 'favorite' : 'favorite_border' }}</mat-icon>
+      </button>
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">{{ product.name }}</h3>
+      @if (product.categoryName) {
+        <span class="badge">{{ product.categoryName }}</span>
+      }
+      @if (product.description) {
+        <p class="card-desc">{{ product.description | slice:0:90 }}{{ product.description.length > 90 ? '…' : '' }}</p>
+      }
+      <div class="card-meta">
+        @if (product.unit) { <small>Sold per <strong>{{ product.unit }}</strong></small> }
+        @if (product.rating != null) {
+          <small class="rating">
+            <mat-icon>star</mat-icon> {{ product.rating | number:'1.1-1' }}
+            <span class="text-muted">({{ product.reviewCount ?? 0 }})</span>
+          </small>
+        }
+      </div>
+    </div>
+  </a>
+  <div class="card-footer">
+    <a [routerLink]="['/quote']" [queryParams]="{ product: product.slug }" class="btn btn--primary btn--block">
+      <mat-icon>request_quote</mat-icon> Request Quote
+    </a>
+  </div>
+</article>

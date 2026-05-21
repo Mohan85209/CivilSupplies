@@ -1,0 +1,111 @@
+<section class="hero">
+  <div class="container hero-inner">
+    <div class="hero-copy">
+      <span class="badge badge--orange">Civil Engineering Supplies · Hyderabad</span>
+      <h1>Build with confidence. <br/>Materials that meet the spec.</h1>
+      <p>
+        From cement and TMT steel to RMC and surveying instruments — we supply construction
+        essentials and on-site services to builders and contractors across Telangana &amp; Andhra Pradesh.
+      </p>
+      <div class="hero-cta">
+        <a routerLink="/quote" class="btn btn--primary"><mat-icon>request_quote</mat-icon> Get a project quote</a>
+        <a routerLink="/products" class="btn btn--ghost">Browse catalog</a>
+      </div>
+      <ul class="hero-stats">
+        <li><strong>500+</strong><span>Projects supplied</span></li>
+        <li><strong>24h</strong><span>Avg. quote turnaround</span></li>
+        <li><strong>15+</strong><span>Material categories</span></li>
+      </ul>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <div class="hero-tile hero-tile--1"><mat-icon>foundation</mat-icon><span>Cement</span></div>
+      <div class="hero-tile hero-tile--2"><mat-icon>construction</mat-icon><span>TMT Steel</span></div>
+      <div class="hero-tile hero-tile--3"><mat-icon>grain</mat-icon><span>Aggregates</span></div>
+      <div class="hero-tile hero-tile--4"><mat-icon>handyman</mat-icon><span>Tools</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <header class="section-header">
+      <h2>Browse by category</h2>
+      <a routerLink="/products" class="link-arrow">All products <mat-icon>arrow_forward</mat-icon></a>
+    </header>
+    <div class="categories-grid">
+      @for (c of (categories$ | async) ?? []; track c.id) {
+        <a [routerLink]="['/products']" [queryParams]="{ category: c.slug }" class="category-card">
+          <span class="category-icon" aria-hidden="true">
+            <mat-icon>category</mat-icon>
+          </span>
+          <strong>{{ c.name }}</strong>
+          @if (c.productCount != null) { <small>{{ c.productCount }} products</small> }
+        </a>
+      } @empty {
+        <p class="text-muted">Categories will load when the backend is available.</p>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="section muted-bg">
+  <div class="container">
+    <header class="section-header">
+      <h2>Why builders choose us</h2>
+    </header>
+    <div class="highlight-grid">
+      @for (h of highlights; track h.title) {
+        <div class="card highlight-card">
+          <span class="highlight-icon"><mat-icon>{{ h.icon }}</mat-icon></span>
+          <h3>{{ h.title }}</h3>
+          <p>{{ h.text }}</p>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <header class="section-header">
+      <h2>Recently added</h2>
+      <a routerLink="/products" class="link-arrow">See all <mat-icon>arrow_forward</mat-icon></a>
+    </header>
+    <div class="product-grid">
+      @for (p of (featured$ | async) ?? []; track p.id) {
+        <cs-product-card [product]="p" />
+      } @empty {
+        <p class="text-muted">No products to display yet.</p>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="section muted-bg">
+  <div class="container">
+    <header class="section-header">
+      <h2>What customers say</h2>
+    </header>
+    <div class="testimonial-grid">
+      @for (t of testimonials; track t.name) {
+        <figure class="card">
+          <blockquote>"{{ t.quote }}"</blockquote>
+          <figcaption>
+            <strong>{{ t.name }}</strong>
+            <small>{{ t.role }}</small>
+          </figcaption>
+        </figure>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="cta-band">
+  <div class="container cta-inner">
+    <div>
+      <h2>Ready to submit your project BOQ?</h2>
+      <p>Upload your bill of quantities and we'll revert with a consolidated quote within 24 hours.</p>
+    </div>
+    <a routerLink="/quote" class="btn btn--primary"><mat-icon>upload_file</mat-icon> Submit BOQ</a>
+  </div>
+</section>

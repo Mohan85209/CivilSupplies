@@ -1,0 +1,65 @@
+<section class="section">
+  <div class="container">
+    <header class="page-header">
+      <div>
+        <h1>Products catalog</h1>
+        <p class="text-muted">Browse cement, steel, bricks, aggregates, tools and more. Quote-only — no pricing displayed publicly.</p>
+      </div>
+      <a routerLink="/quote" class="btn btn--primary"><mat-icon>request_quote</mat-icon> Request bulk quote</a>
+    </header>
+
+    <div class="filters">
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Search products</mat-label>
+        <mat-icon matPrefix>search</mat-icon>
+        <input matInput [formControl]="searchControl" placeholder="e.g. UltraTech, TMT 12mm, M-sand…" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="sort-field">
+        <mat-label>Sort</mat-label>
+        <mat-select [formControl]="sortControl">
+          <mat-option value="createdAt,desc">Newest first</mat-option>
+          <mat-option value="name,asc">Name A–Z</mat-option>
+          <mat-option value="name,desc">Name Z–A</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <mat-chip-listbox class="category-chips" aria-label="Category filter">
+      <mat-chip-option [selected]="!selectedCategory()" (click)="selectCategory(null)">All</mat-chip-option>
+      @for (c of categories(); track c.id) {
+        <mat-chip-option [selected]="selectedCategory() === c.slug" (click)="selectCategory(c.slug)">
+          {{ c.name }}
+        </mat-chip-option>
+      }
+    </mat-chip-listbox>
+
+    @if (loading()) {
+      <p class="text-muted text-center">Loading products…</p>
+    }
+
+    <div class="product-grid">
+      @for (p of page()?.content ?? []; track p.id) {
+        <cs-product-card [product]="p" />
+      } @empty {
+        @if (!loading()) {
+          <div class="empty-state card">
+            <mat-icon>inventory_2</mat-icon>
+            <h3>No matching products</h3>
+            <p>Try a different search term or category, or <a (click)="clearFilters()">clear filters</a>.</p>
+          </div>
+        }
+      }
+    </div>
+
+    @if (page() && page()!.totalElements > 0) {
+      <mat-paginator
+        [length]="page()!.totalElements"
+        [pageIndex]="page()!.number"
+        [pageSize]="page()!.size"
+        [pageSizeOptions]="[12, 24, 48]"
+        (page)="onPageChange($event)"
+      ></mat-paginator>
+    }
+  </div>
+</section>
