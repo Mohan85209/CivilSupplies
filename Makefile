@@ -1,4 +1,17 @@
-.PHONY: up down logs seed build test lint test-backend test-frontend lint-backend lint-frontend build-frontend deploy clean
+.PHONY: help up down logs build test test-backend test-frontend lint lint-backend lint-frontend build-frontend build-backend clean
+
+help:
+	@echo "Civil Supplies — common tasks"
+	@echo ""
+	@echo "  make up              Bring up the full stack (postgres + redis + backend + frontend)"
+	@echo "  make down            Tear down the stack"
+	@echo "  make logs            Tail container logs"
+	@echo "  make build           Build both frontend and backend artifacts"
+	@echo "  make test            Run all tests (backend + frontend)"
+	@echo "  make test-backend    Run JUnit/Mockito tests for the Spring Boot API"
+	@echo "  make test-frontend   Run Karma/Jasmine tests for the Angular app"
+	@echo "  make lint            Run lint for both frontend and backend"
+	@echo "  make clean           Remove build artifacts"
 
 # --- Docker / dev loop ------------------------------------------------------
 up:
@@ -10,38 +23,33 @@ down:
 logs:
 	docker compose logs -f
 
-seed:
-	docker compose exec backend python scripts/seed.py
-
 # --- Tests ------------------------------------------------------------------
 test: test-backend test-frontend
 
 test-backend:
-	cd backend && pytest -q
+	cd backend && mvn -B -q test
 
 test-frontend:
-	cd frontend && npm test
+	cd frontend && npm test -- --watch=false --browsers=ChromeHeadless
 
 # --- Lint -------------------------------------------------------------------
 lint: lint-backend lint-frontend
 
 lint-backend:
-	cd backend && ruff check .
+	cd backend && mvn -B -q -DskipTests verify
 
 lint-frontend:
-	cd frontend && npm run lint
+	cd frontend && npm run lint --if-present
 
 # --- Build ------------------------------------------------------------------
-build: build-frontend
+build: build-backend build-frontend
+
+build-backend:
+	cd backend && mvn -B -q -DskipTests package
 
 build-frontend:
-	cd frontend && npm run build
-
-# --- Deploy (placeholder — see infra/README.md for the real runbook) --------
-deploy:
-	@echo "See infra/README.md for the deployment runbook."
-	@echo "CI deploys on push to main via .github/workflows/deploy.yml"
+	cd frontend && npm ci && npm run build
 
 # --- Cleanup ----------------------------------------------------------------
 clean:
-	rm -rf backend/.pytest_cache frontend/.next frontend/coverage backend/__pycache__
+	rm -rf backend/target frontend/dist frontend/.angular frontend/coverage backend/uploads/*
