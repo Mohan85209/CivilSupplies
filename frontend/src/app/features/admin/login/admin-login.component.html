@@ -1,0 +1,53 @@
+<section class="login-shell">
+  <div class="container login-grid">
+    <aside class="login-hero">
+      <a routerLink="/" class="back-link"><mat-icon>arrow_back</mat-icon> Back to website</a>
+      <h1>Admin sign-in</h1>
+      <p>Access enquiries, quotes, products, and reporting for Civil Supplies operations.</p>
+      <ul>
+        <li><mat-icon>verified_user</mat-icon> Role-based access (RBAC)</li>
+        <li><mat-icon>lock</mat-icon> JWT-secured session</li>
+        <li><mat-icon>history</mat-icon> Audit-logged actions</li>
+      </ul>
+    </aside>
+
+    <form class="card login-card" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <h2>Sign in</h2>
+      <p class="text-muted">Use your assigned admin credentials.</p>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" type="email" autocomplete="username" required />
+        @if (form.controls.email.touched && form.controls.email.invalid) {
+          <mat-error>Enter a valid email.</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Password</mat-label>
+        <input
+          matInput
+          formControlName="password"
+          [type]="showPassword() ? 'text' : 'password'"
+          autocomplete="current-password"
+          required
+        />
+        <button mat-icon-button matSuffix type="button" (click)="showPassword.set(!showPassword())" [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'">
+          <mat-icon>{{ showPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+        @if (form.controls.password.touched && form.controls.password.invalid) {
+          <mat-error>Minimum 8 characters.</mat-error>
+        }
+      </mat-form-field>
+
+      <button type="submit" class="btn btn--primary btn--block" [disabled]="submitting() || form.invalid">
+        <mat-icon>login</mat-icon>
+        {{ submitting() ? 'Signing in…' : 'Sign in' }}
+      </button>
+
+      <small class="login-hint">
+        Forgot your password? Contact the system administrator to reset it.
+      </small>
+    </form>
+  </div>
+</section>
