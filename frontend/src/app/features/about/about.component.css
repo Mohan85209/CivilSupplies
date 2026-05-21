@@ -1,0 +1,43 @@
+.about-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 2.5rem;
+  align-items: start;
+}
+.lede { font-size: 1.05rem; color: var(--color-text-muted); max-width: 580px; }
+.hero-cta { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1.5rem; }
+
+.mission-card h3 { display: inline-flex; align-items: center; gap: 0.4rem; margin-top: 1rem; }
+.mission-card h3:first-of-type { margin-top: 0; }
+
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+  margin-top: 2rem;
+}
+.value-icon {
+  width: 44px; height: 44px;
+  display: grid; place-items: center;
+  background: rgba(245,130,32,0.12);
+  color: var(--color-orange);
+  border-radius: var(--radius-sm);
+  margin-bottom: 0.5rem;
+}
+
+.timeline { list-style: none; padding: 0; margin: 2rem 0 0; display: flex; flex-direction: column; gap: 1.25rem; }
+.timeline li { display: grid; grid-template-columns: 100px 1fr; gap: 1.25rem; }
+.timeline-year { color: var(--color-orange); font-family: var(--font-display); font-weight: 800; font-size: 1.35rem; }
+.timeline li h3 { margin: 0 0 0.25rem; }
+.timeline li p { margin: 0; color: var(--color-text-muted); }
+
+.cert-band { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; align-items: center; }
+.cert-list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
+.cert-list li { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.6rem 0.85rem; border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: var(--color-bg); }
+.cert-list mat-icon { color: var(--color-orange); }
+
+@media (max-width: 900px) {
+  .about-grid, .cert-band { grid-template-columns: 1fr; }
+  .timeline li { grid-template-columns: 70px 1fr; }
+  .cert-list { grid-template-columns: 1fr; }
+}

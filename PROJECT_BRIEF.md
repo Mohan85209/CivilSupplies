@@ -6,7 +6,7 @@
 
 ## 1. Business context
 
-- **Owner:** Mohan Kumar, based in Hyderabad, India.
+- **Owner:** Sudheer Bellam, based in Hyderabad, India.
 - **Business:** Civil engineering supplies and services — supplies construction materials (cement, TMT steel, bricks/blocks, aggregates, RMC, chemicals, tools, safety gear, surveying instruments) and offers services (material supply & delivery, site survey & estimation, bulk procurement, RMC pumping, equipment rental, technical consultation, project material planning).
 - **Customers:** Builders, contractors, infrastructure firms, primarily in Telangana & Andhra Pradesh.
 - **Primary website goals:**
@@ -22,19 +22,20 @@
 
 | Layer | Choice |
 |---|---|
-| Frontend | **Next.js 14** (App Router) + TypeScript + Tailwind CSS + shadcn/ui |
-| Form handling | react-hook-form + zod |
-| HTTP client | fetch (centralized in `lib/api.ts`), reads `NEXT_PUBLIC_API_URL` |
-| Backend | **FastAPI** (Python 3.11+) + SQLAlchemy 2.x + Pydantic v2 |
-| Database | SQLite for local dev, **PostgreSQL** for production |
-| Auth | JWT (HS256) for the admin panel only — public endpoints are unauthenticated but rate-limited |
-| Email | SMTP via `smtplib` — works with Gmail app passwords, SendGrid, or AWS SES |
-| File uploads | Local disk in dev (`./uploads`), **AWS S3** in production (presigned URLs) |
-| Rate limiting | slowapi (already wired in) |
-| Deploy target | **AWS** — Amplify or S3+CloudFront for frontend; EC2 (t3.small) + RDS Postgres + SES + S3 for backend |
-| Containerization | Docker + docker-compose for local; same image runs on EC2 |
+| Frontend | **Angular 17** (standalone components, signals) + TypeScript (strict) + Angular Material + CSS (Flexbox/Grid) |
+| Form handling | Angular `ReactiveFormsModule` with Material form fields |
+| HTTP client | `HttpClient` + RxJS, centralized in `core/services/api.service.ts`, base URL from `environments/*` |
+| Backend | **Spring Boot 3.2** (Java 17) + Spring MVC + Spring Data JPA / Hibernate |
+| Database | **H2** (in-memory) for dev profile, **PostgreSQL 16** for prod — Flyway migrations |
+| Auth | **JWT (HS256)** with access + refresh tokens, **RBAC** (`ROLE_ADMIN`, `ROLE_STAFF`, `ROLE_VIEWER`) via Spring Security |
+| Email | `JavaMailSender` over SMTP — works with Gmail app passwords, SendGrid, or AWS SES |
+| File uploads | Local disk in dev (`./uploads`), **AWS S3** in production (via `StorageService` interface) |
+| Rate limiting | Bucket4j on public endpoints (enquiries, quotes, newsletter) |
+| Caching | Spring Cache (in-process) + Redis-ready |
+| Deploy target | **AWS** — S3 + CloudFront for the Angular bundle (or Nginx container), ECS/Fargate or Elastic Beanstalk for the Spring Boot container, RDS PostgreSQL, SES, S3 for uploads |
+| Containerization | Docker (multi-stage) + docker-compose for local; same images deploy to AWS |
 
-**Do not introduce new frameworks** (no Django, no Express, no Vite, no Prisma) unless the user explicitly asks.
+**Do not introduce new frameworks** (no React, no Next.js, no Python web frameworks) unless the user explicitly asks.
 
 ---
 
@@ -63,22 +64,28 @@
 
 ---
 
-## 5. Backend endpoints (target final state)
+## 5. Backend endpoints (current state)
 
 | Method & Path | Auth | Purpose |
 |---|---|---|
 | `POST /api/enquiries` | public, rate-limited | Submit contact form |
 | `GET /api/enquiries` | admin (JWT) | List enquiries (paginated) |
-| `PATCH /api/enquiries/{id}` | admin | Update status |
+| `PATCH /api/enquiries/{id}` | ADMIN / STAFF | Update status |
 | `POST /api/quotes` | public, rate-limited | Submit RFQ with BOQ upload (multipart) |
 | `GET /api/quotes` | admin | List quotes |
-| `GET /api/quotes/{id}/boq` | admin | Download BOQ file (presigned S3 URL in prod) |
-| `GET /api/products` | public | Filter by `category`, `q` (search), pagination |
+| `PATCH /api/quotes/{id}` | ADMIN / STAFF | Update status |
+| `GET /api/quotes/{id}/boq` | admin | Returns presigned/local URL to the BOQ file |
+| `GET /api/products` | public | Filter by `category`, `q` (search), `sort`, pagination |
 | `GET /api/products/{slug}` | public | Product detail |
 | `GET /api/categories` | public | All categories |
-| `POST /api/admin/login` | public | Returns JWT |
+| `POST /api/newsletter/subscribe` | public, rate-limited | Newsletter opt-in |
+| `POST /api/admin/login` | public | Returns access + refresh JWT |
+| `POST /api/admin/refresh` | public | Refresh access token |
 | `GET /api/admin/me` | admin | Current admin |
+| `GET /api/admin/users` | ADMIN / STAFF | List admin users |
+| `POST /api/admin/users` | ADMIN | Create admin user |
 | `GET /health` | public | Liveness probe for AWS |
+| `GET /actuator/prometheus` | public | Metrics scrape |
 
 ---
 
